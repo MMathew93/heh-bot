@@ -9,13 +9,8 @@ Idea of bot is to have a heh count for individual users
 ??????? Future Things?  ????????
 # I should seperate each individual bot command to seperate files to keep the code cleaner and bring them all into the one app file
 # I should set up the DB to save the server ID so that user/message data is saved into different sub clusters
+# Refactor the hiscore function
 
-issues // Bugs
-Hiscore needs to be finished
 
 Additional Requests
-# random 5% chance to trigger the bot to say 'heh' on user messages
-# random 1% chance to trigger bot response of: "Heh isn't something you throw out lightly. It is a cold dark phrase that destroys the humanity of a child's wonder. No one knows why heh was necessary, but we do know that your opinions do not matter. They will not matter and in the game of life, you have lost."
-instead of 'nice'
 # bot counter?
-

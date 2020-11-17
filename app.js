@@ -10,11 +10,6 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 const User = require('./user');
 
-// console.log signifies when bot is running
-client.once('ready', () => {
-	console.log('Ready!');
-});
-
 function degen(score) {
 	return score < 5 ? 'Weeny Boi'
 		: score < 15 ? 'Beany Boi'
@@ -22,13 +17,6 @@ function degen(score) {
 				: score < 50 ? 'Dillonstigator Expert'
 					: score < 100 ? 'GOT DAMN BOI'
 						: score < 150 ? 'God of Degenerates' : 'UwU';
-}
-
-async function getList() {
-	const result = await db.collection('users').find().sort({ score: -1 }).limit(5);
-	return result.toArray(async function(err, user) {
-		return console.log(user);
-	});
 }
 
 client.on('message', message => {
@@ -70,18 +58,27 @@ client.on('message', message => {
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
 	if(message.content === `${prefix}hiscore`) {
 		try {
-			getList();
-			const leaderboard = '**Leaderboard** \n';
-			message.channel.send(`${leaderboard}`);
+			const result = db.collection('users').find().sort({ score: -1 }).limit(5);
+			result.toArray(function(err, user) {
+				const userList = user.map(function(x) {
+					const username = client.users.cache.get(x.userId);
+					return [username ? username.tag : 'Undefined', x.score];
+				});
+				let leaderboard = '**Leaderboard** \n';
+				for(let i = 0; i < userList.length; i++) {
+					if(i == 0) {
+						leaderboard += `${i + 1} - ${userList[i][0]} [${userList[i][1]}] points \n`;
+					}
+					else {
+						leaderboard += `${i + 1} - ${userList[i][0]} [${userList[i][1]}]points \n`;
+					}
+				}
+				message.channel.send(`${leaderboard}`);
+			});
 		}
 		catch(err) {
 			console.error(err);
 		}
-		/* const username = client.users.cache.get(user.userId);
-		if(username) {
-			message.channel.send(username.tag);
-		}
-		console.log(username);*/
 	}
 });
 
@@ -133,6 +130,20 @@ client.on('message', message => {
 		}
 		catch(err) {
 			console.error(err);
+		}
+	}
+});
+
+// Easter Egg stuff
+client.on('message', message => {
+	if(message.author.bot) return;
+	const easterEgg = Math.random();
+	if(message.content) {
+		if(easterEgg <= 0.01) {
+			message.channel.send('"Heh isn\'t something you throw out lightly. It is a cold dark phrase that destroys the humanity of a child\'s wonder. No one knows why heh was necessary, but we do know that your opinions do not matter. They will not matter and in the game of life, you have lost."');
+		}
+		else if(easterEgg <= 0.05) {
+			message.channel.send('heh');
 		}
 	}
 });
