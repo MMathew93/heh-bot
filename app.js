@@ -34,7 +34,7 @@ client.on('message', message => {
 		message.channel.send('nice.');
 		// search if user is in database, if not make one, if true update
 		try{
-			User.updateOne({ userId: message.author.id },
+			User.findOneAndUpdate({ userId: message.author.id },
 				{ $inc: { score: 1 } },
 				function(err, exists) {
 					if(err) {console.error(err);}
