@@ -90,7 +90,7 @@ client.on('message', message => {
 			User.findOne({
 				userId: message.author.id,
 			}, function(err, user) {
-				if(err) {
+				if(!user) {
 					message.channel.send('Nothing personal kid, but you don\'t have a score to share!');
 				}
 				else {
